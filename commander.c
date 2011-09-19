@@ -166,7 +166,7 @@ static void init_gl(ModeInfo *mi)
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDrawBuffer(GL_BACK);
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
+  /*glEnable(GL_CULL_FACE);*/
   /* glFrontFace(GL_CCW); /* CCW for original source data */
   glFrontFace(GL_CW); /* CW for "by hand" data */
 

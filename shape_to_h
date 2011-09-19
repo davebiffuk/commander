@@ -7,7 +7,7 @@ $first_colon=0;
 $waiting_for_name=0;
 $name="";
 @ships=();
-$scale=0.1; # make per-ship?
+$exp_size=5; # size to map to
 
 while(1) {
 	skip_to_colon();
@@ -26,13 +26,29 @@ while(1) {
 		  $qf, " faces */\n\n";
 	$vertices=r(); # literal "vertices"
 	if($vertices !~ m/vertices/i) { print "not vertices: $l\n"; exit; }
+	$maxx=0; $maxy=0; $maxz=0;
+	@verts=();
 	print "GLfloat ", $name, "_v[] = {\n";
 	for ($i=0; $i<$qv; $i++) {
 		$l=r();
 		($x,$y,$z) = split(/,/, $l);
-		$x=hex_to_dec($x);
-		$y=hex_to_dec($y);
-		$z=hex_to_dec($z);
+		$x=hex_to_dec($x); $y=hex_to_dec($y); $z=hex_to_dec($z);
+		if($x>$maxx) { $maxx=$x; }
+		if($y>$maxy) { $maxy=$y; }
+		if($z>$maxz) { $maxz=$z; }
+		push @verts, ($x,$y,$z);
+	}
+	$max=0;
+	if($maxx>$max) { $max=$maxx; }
+	if($maxy>$max) { $max=$maxy; }
+	if($maxz>$max) { $max=$maxz; }
+	$scale=$exp_size/$max;
+	print "/* scale=$scale */\n";
+	for ($i=0; $i<$qv; $i++) {
+		$x = shift @verts;
+		$y = shift @verts;
+		$z = shift @verts;
+		print "/* $x,$y,$z -> */ ";
 		print $x*$scale, ",", $y*$scale, ",", $z*$scale, ",\n";
 	}
 	print "};\n";
