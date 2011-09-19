@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+# vi:ai:ts=4:sw=4:cindent
+
+open(I,"B7051600.TXT") or die "open failed: $!\n";
+
+$first_colon=0;
+$waiting_for_name=0;
+$name="";
+@ships=();
+$scale=0.1; # make per-ship?
+
+while(1) {
+	skip_to_colon();
+	$name=lc(r());
+	next if $name=~m/splinter/i; # can't parse that one
+	$front_laser=r();
+	$qvf=r();
+	($qv, $qf) = split(/,/, $qvf);
+	if($qv=~m/([^-]+)-(\d+)/) { $qv=hex_to_dec($1)-$2; }
+		else { $qv=hex_to_dec($qv); }
+	if($qf=~m/([^-]+)-(\d+)/) { $qf=hex_to_dec($1)-$2; }
+		else { $qf=hex_to_dec($qf); }
+#	if($qf=~m/-/) { $qf=hex_to_dec($qf); } else { $qf=eval $qf; }
+	push @ships, $name;
+	print "\n/* ", $name, " has ", $qv, " vertices and ",
+		  $qf, " faces */\n\n";
+	$vertices=r(); # literal "vertices"
+	if($vertices !~ m/vertices/i) { print "not vertices: $l\n"; exit; }
+	print "GLfloat ", $name, "_v[] = {\n";
+	for ($i=0; $i<$qv; $i++) {
+		$l=r();
+		($x,$y,$z) = split(/,/, $l);
+		$x=hex_to_dec($x);
+		$y=hex_to_dec($y);
+		$z=hex_to_dec($z);
+		print $x*$scale, ",", $y*$scale, ",", $z*$scale, ",\n";
+	}
+	print "};\n";
+	$faces=r(); # literal "faces"
+	if($faces !~ m/faces/i) { print "not faces: $l\n"; exit; }
+	print "GLint ", $name, "_f[] = {\n";
+	for ($i=0; $i<$qf; $i++) {
+		$l=r();
+		($col,$nx,$ny,$nz,$rest) = split(/,/, $l, 5);
+		print $rest, ",\n";
+	}
+	print "0\n";
+	print "};\n";
+
+}
+
+# not reached
+exit(0);
+
+sub r {
+	my $r;
+	do {
+		$r=<I>;
+		chomp $r;
+		if($r =~ m/^REM/) { print "/* skipping: $r */\n"; }
+	} until ($r !~ m/^REM/);
+	$r=~s/^\s*//;
+	$r=~s/\s*$//;
+	return($r);
+}
+
+sub skip_to_colon {
+	while(<I>) {
+#print ">> ", $_;
+		if(m/file ends/i) { trailer(); exit(0); }
+		last if (m/^:/);
+	}
+}
+
+sub hex_to_dec {
+	my $h=shift;
+	my $m="";
+	if($h=~m/^-/) { $m="-"; $h=~s/^-//; }
+	if($h!~m/^&/) { return($m.$h); }
+	my $v=$h;
+	$v=~tr/-&//d;
+	return($m.hex($v));
+}
+
+sub trailer {
+	print "char *ship_names[] = {\n";
+	foreach $i (@ships) {
+		print "\t\"", $i, "\",\n";
+	}
+	print "};\n";
+	print "\n#define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)))\n\n";
+	print "GLfloat *ship_v[] = {\n";
+	foreach $i (@ships) {
+		print "\t&", $i, "_v[0],\n";
+	}
+	print "};\n";
+	print "GLint *ship_f[] = {\n";
+	foreach $i (@ships) {
+		print "\t&", $i, "_f[0],\n";
+	}
+	print "};\n";
+}

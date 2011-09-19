@@ -1,0 +1,48 @@
+To-do: (approximate priority order)
+
+* fix wireframe drawing - do filled polygons first
+* check Oolite licensing situation - CC-NC-SA-2
+* xscreensaver necessities: .man, .xml
+* Asp: check data
+* Cobra: add engines
+* Viper: add engines
+* Coriolis/Dodo: tearing of docking port in filled mode
+* should Coriolis only rotate about docking port axis?
+* textures??
+
+Ongoing:
+
+* fix polygon data to merge triangles
+
+Done:
+
+* add command-line switch to choose which ship is displayed
+* wireframe drawing
+* Coriolis: fix docking port
+* rename cobra.* -> commander.*
+* "random" mode - change displayed ship sometimes
+
+
+Gah, Gnome will only list/start a screensaver if it's in a "trusted"
+directory (i.e. /usr/lib/xscreensaver)
+
+binary goes in /usr/lib/xscreensaver
+.xml file goes in /usr/share/xscreensaver/config
+.desktop file goes in /usr/share/applications/screensavers
+or ~/.local/share/applications/screensavers/
+
+see http://ubuntuforums.org/showthread.php?t=1583335
+
+Elite web site: http://www.iancgbell.clara.net/elite/
+Elite ships: http://wiki.alioth.net/index.php/Classic_Elite_ships
+http://live.gnome.org/GnomeScreensaver/FrequentlyAskedQuestions
+
+Hidden line removal: http://glprogramming.com/red/chapter14.html#name16
+
+to invert winding order:
+sed -e 's/{//' -e 's/},//' | awk -F , '{ print "{" $3 ","  $2 "," $1 "}," }'
+
+to scale down vertex data:
+awk -F , '{ S=10; print $1/S "," $2/S "," $3/S "," }'
+
+
