@@ -45,4 +45,8 @@ sed -e 's/{//' -e 's/},//' | awk -F , '{ print "{" $3 ","  $2 "," $1 "}," }'
 to scale down vertex data:
 awk -F , '{ S=10; print $1/S "," $2/S "," $3/S "," }'
 
+sync to vblank/refresh:
+__GL_SYNC_TO_VBLANK=1
+LIBL_SYNC_REFRESH=1
 
+http://www.opengl.org/wiki/Synchronization

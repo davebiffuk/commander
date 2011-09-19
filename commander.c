@@ -167,6 +167,7 @@ static void init_gl(ModeInfo *mi)
   glDrawBuffer(GL_BACK);
   glEnable(GL_DEPTH_TEST);
   /*glEnable(GL_CULL_FACE);*/
+	glDisable(GL_CULL_FACE);
   /* glFrontFace(GL_CCW); /* CCW for original source data */
   glFrontFace(GL_CW); /* CW for "by hand" data */
 
@@ -401,7 +402,7 @@ ENTRYPOINT void draw_commander(ModeInfo * mi)
   }
   mi->polygon_count = cp->npoints;
   if (MI_IS_FPS(mi)) do_fps (mi);
-  glFlush();
+  /*glFlush();*/
   glXSwapBuffers(display, window);
 }
 
