@@ -229,6 +229,9 @@ static void new_ship(ModeInfo *mi)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glColor3f(1.0, 1.0, 1.0);
 
+		/* TODO
+		 * glLineWidth(2); ???
+		 */
 
     while(*p != 0) {
       count=*p; p++;
