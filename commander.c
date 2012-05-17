@@ -166,9 +166,8 @@ static void init_gl(ModeInfo *mi)
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDrawBuffer(GL_BACK);
   glEnable(GL_DEPTH_TEST);
-  /*glEnable(GL_CULL_FACE);*/
-	glDisable(GL_CULL_FACE);
-  /* glFrontFace(GL_CCW); /* CCW for original source data */
+  glEnable(GL_CULL_FACE); /* FIXME interacts badly with shape_to_h */
+  /* glFrontFace(GL_CCW); */ /* CCW for original source data */
   glFrontFace(GL_CW); /* CW for "by hand" data */
 
   /* glPixelStorei(GL_UNPACK_ALIGNMENT, 1); */
@@ -213,54 +212,24 @@ static void new_ship(ModeInfo *mi)
   cp->list = glGenLists(1);
   glNewList(cp->list, GL_COMPILE);
   if(MI_IS_MONO(mi)) {
-    /* FIXME */
+    /* FIXME support mono display */
     abort();
   }
   else
   {
-		/* FIXME
-		 * http://www.opengl.org/resources/faq/technical/polygonoffset.htm
+		/* http://www.opengl.org/resources/faq/technical/polygonoffset.htm
 		 * says "Two passes are then made, once with the model's solid
-		 * geometry and once again with the line geometry." -- should this
-		 * be changed to draw the solid polygons first?
+		 * geometry and once again with the line geometry." -- so this
+		 * draws the solid polygons first.
 		 * Seconded by http://glprogramming.com/red/chapter06.html
 		 */
-  if(wire) {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glColor3f(1.0, 1.0, 1.0);
 
-		/* TODO
-		 * glLineWidth(2); ???
-		 */
-
-    while(*p != 0) {
-      count=*p; p++;
-      if(count==1) { glBegin(GL_POINTS); }
-      else if(count==2) { glBegin(GL_LINES); }
-      else { glBegin(GL_POLYGON); 
-#if 0
-          this_v[p[0]][0], this_v[p[0]][1], this_v[p[0]][2],
-          this_v[p[1]][0], this_v[p[1]][1], this_v[p[1]][2],
-          this_v[p[2]][0], this_v[p[2]][1], this_v[p[2]][2]);
-#endif
-        do_normal(
-          this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
-          this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
-          this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
-        }
-      for (i = 0 ; i < count ; i++) {
-        glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
-      }
-      cp->npoints++;
-      p+=count;
-      glEnd();
-    }
-
-  /* set up the offset for the black fill for hidden line removal */
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-  glEnable(GL_POLYGON_OFFSET_FILL);
-  glPolygonOffset(1.0, 1.0);
-  glColor3f(0.0, 0.0, 0.0);
+	if(wire) {
+		/* set up the offset for the black fill for hidden line removal */
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glPolygonOffset(0.0, 0.0);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glColor3f(0.0, 0.0, 0.0);
   }
 
   /* reset pointer */
@@ -279,10 +248,12 @@ static void new_ship(ModeInfo *mi)
       if(wire) { glColor3f(0.0, 0.0, 0.0); }
       if(!wire) { glEnable(GL_LIGHTING); }
       glBegin(GL_POLYGON); 
+			/*
       do_normal(
           this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
           this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
           this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
+					*/
       }
     for (i = 0 ; i < count ; i++) {
         glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
@@ -294,10 +265,40 @@ static void new_ship(ModeInfo *mi)
 
 
 
-
-
   if(wire) { glDisable(GL_POLYGON_OFFSET_FILL); }
+
   }
+
+  if(wire) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glColor3f(1.0, 1.0, 1.0);
+
+		/* chunky lines :-) */
+		glLineWidth(2); 
+
+  	/* reset pointer */
+		p=ship_f[cp->which];
+		/* draw the wireframe shape */
+    while(*p != 0) {
+      count=*p; p++;
+      if(count==1) { glBegin(GL_POINTS); }
+      else if(count==2) { glBegin(GL_LINES); }
+      else {
+				glBegin(GL_POLYGON); 
+				/*
+        do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
+          this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
+          this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
+					*/
+			}
+      for (i = 0 ; i < count ; i++) {
+        glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
+      }
+      cp->npoints++;
+      p+=count;
+      glEnd();
+    }
+	}
   glEndList();
 }
 
@@ -380,7 +381,7 @@ ENTRYPOINT void init_commander(ModeInfo *mi)
 		}
 	}
 
-	/* FIXME */
+	/* FIXME (what?) */
 	if(do_which==-1) {
 		cp->which=random() % NUM_ELEM(ship_names);
 	}
