@@ -166,7 +166,7 @@ static void init_gl(ModeInfo *mi)
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDrawBuffer(GL_BACK);
   glEnable(GL_DEPTH_TEST);
-	glEnable(GL_NORMALIZE);
+	/*glEnable(GL_NORMALIZE);*/ /* breaks lighting in filled mode */
   glEnable(GL_CULL_FACE); /* FIXME interacts badly with original data
 														 from shape_to_h */
   /* glFrontFace(GL_CCW); */ /* CCW for original source data */
