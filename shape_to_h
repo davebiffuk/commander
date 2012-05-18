@@ -2,6 +2,7 @@
 # vi:ai:ts=4:sw=4:cindent
 
 use Data::Dumper;
+use Math::Vec qw(NewVec); # libmath-vec-perl
 
 open(I,"B7051600.TXT") or die "open failed: $!\n";
 
@@ -15,6 +16,8 @@ while(1) {
 	skip_to_colon();
 	$name=lc(r());
 	next if $name=~m/splinter/i; # can't parse that one
+	next if $name=~m/square/i; # boring
+	next if $name=~m/tetra/i; # boring
 	$front_laser=r(); # FIXME use this vertex number
 	$qvf=r();
 	($qv, $qf) = split(/,/, $qvf);
@@ -61,6 +64,7 @@ while(1) {
 	for ($i=0; $i<$qf; $i++) {
 		$l=r();
 		($col,$nx,$ny,$nz,$rest) = split(/,/, $l, 5);
+		$rest=fix_winding_order($rest);
 		print $rest, ",\n";
 	}
 	print "0\n";
@@ -118,4 +122,30 @@ sub trailer {
 		print "\t&", $i, "_f[0],\n";
 	}
 	print "};\n";
+}
+
+# given a polygon, correct the winding order if necessary
+sub fix_winding_order {
+	my $poly=shift;
+	($num,$origver) = split(/,/, $poly, 2);
+	if($num<3) { return($poly); }
+	@ver=split(/,/, $origver);
+	($p1,$p2,$p3,$rest) = split(/,/, $origver, 4);
+
+# if the dot product of a normal to the plane of the polygon and a
+# point in/on the polygon is >0 then the winding order needs to be
+# reversed
+
+	$v1=NewVec($verts[$p1*3], $verts[$p1*3+1], $verts[$p1*3+2]);
+	$v2=NewVec($verts[$p2*3], $verts[$p2*3+1], $verts[$p2*3+2]);
+	$v3=NewVec($verts[$p3*3], $verts[$p3*3+1], $verts[$p3*3+2]);
+
+	$v12=NewVec($v2->Minus($v1));
+	$v13=NewVec($v3->Minus($v1));
+
+	$pun=NewVec($v1->PlaneUnitNormal($v12,$v13));
+	$dp=$pun->Dot($v2);
+	if($dp<0) { return('/* CW */ ' . $poly); }
+	else { return("/* CCW $origver */ " .
+			$num . ',' . join(',', reverse(@ver))) }
 }
