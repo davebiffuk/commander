@@ -315,7 +315,7 @@ ENTRYPOINT void reshape_commander(ModeInfo *mi, int width, int height)
   glViewport(0, 0, (GLint) width, (GLint) height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, cp->ratio, 0.1, 100.0);
+  gluPerspective(60.0, cp->ratio, 1.0, 100.0);
   glMatrixMode(GL_MODELVIEW);
   glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -409,7 +409,7 @@ ENTRYPOINT void draw_commander(ModeInfo * mi)
   }
   mi->polygon_count = cp->npoints;
   if (MI_IS_FPS(mi)) do_fps (mi);
-  glFlush(); /* or glFinish(); ??? */
+  glFinish();
   glXSwapBuffers(display, window);
 }
 
