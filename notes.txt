@@ -1,6 +1,12 @@
 To-do: (approximate priority order)
 
 * reinstate front lasers
+* Transporter: reinstate IB/DB initials and lines on base
+* Missile: fix fin culling
+* Asp: check original data for aerials
+* Moray: windscreen tearing
+* Moray: check original data for torpedo tubes
+* Thargoid: check original data for lines on base
 * xscreensaver necessities: .man, .xml
 * Coriolis/Dodo: tearing of docking port in filled mode
 * textures??
