@@ -47,9 +47,9 @@ while(1) {
 	$scale=$exp_size/$max;
 	print "/* scale=$scale */\n";
 	for ($i=0; $i<$qv; $i++) {
-		$x = shift @verts;
-		$y = shift @verts;
-		$z = shift @verts;
+		$x = $verts[$i*3];
+		$y = $verts[$i*3 + 1];
+		$z = $verts[$i*3 + 2];
 		print "/* $x,$y,$z -> */ ";
 		print $x*$scale, ",", $y*$scale, ",", $z*$scale, ",\n";
 	}
@@ -61,21 +61,10 @@ while(1) {
 	for ($i=0; $i<$qf; $i++) {
 		$l=r();
 		($col,$nx,$ny,$nz,$rest) = split(/,/, $l, 5);
-		$nx=hex_to_dec($nx); $ny=hex_to_dec($ny); $nz=hex_to_dec($nz);
-		push @normals, ($nx*$scale, $ny*$scale, $nz*$scale);
 		print $rest, ",\n";
 	}
 	print "0\n";
 	print "};\n";
-
-#	print "GLfloat ",$name, "_n[] = {\n";
-#	for ($i=0; $i<$qf*3; $i++) {
-#		$a=shift @normals;
-#		print $a, ", ";
-#		if(($i % 3) == 2) { print "\n"; }
-#	}
-#	print "};\n";
-
 }
 
 # not reached
@@ -129,9 +118,4 @@ sub trailer {
 		print "\t&", $i, "_f[0],\n";
 	}
 	print "};\n";
-#	print "GLfloat *ship_n[] = {\n";
-#	foreach $i (@ships) {
-#		print "\t&", $i, "_n[0],\n";
-#	}
-#	print "};\n";
 }
