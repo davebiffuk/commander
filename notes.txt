@@ -1,11 +1,8 @@
 To-do: (approximate priority order)
 
-* fix flickering - glFlush() doesn't help - check polyhedra
 * Transporter: reinstate IB/DB initials and lines on base
 * reinstate front lasers
-* Missile: fix fin culling
 * Asp: check original data for aerials
-* Moray: windscreen tearing
 * Moray: check original data for torpedo tubes
 * Thargoid: check original data for lines on base
 * xscreensaver necessities: .man, .xml
@@ -13,6 +10,9 @@ To-do: (approximate priority order)
 * textures??
 
 Ongoing:
+
+* Missile: fix fin culling/show-through
+* Krait: fix side aerial show-through
 
 Done:
 
@@ -29,6 +29,11 @@ Done:
 * Asp: check data - by using original data
 * should Coriolis only rotate about docking port axis? - hard, not
   worth it
+* fix flickering - glFlush() doesn't help - check polyhedra - done by
+  abandoning glPolygonOffset and double-drawing approach (so filled
+  mode doesn't work any more)
+  - fixes Krait: windscreen tearing
+  - fixes Moray: windscreen tearing
 
 
 Gah, Gnome will only list/start a screensaver if it's in a "trusted"

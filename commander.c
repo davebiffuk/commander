@@ -16,7 +16,7 @@
 
 #define DEFAULTS   "*delay:         20000         \n" \
                    "*showFPS:       False         \n" \
-                   "*wireframe:     False         \n"
+                   "*wireframe:     True          \n"
 
 #define refresh_commander 0
 #include "xlockmore.h"
@@ -182,10 +182,11 @@ static void new_ship(ModeInfo *mi)
   commander_conf *cp = &commander[MI_SCREEN(mi)];
   int i;
   GLfloat *this_v;
-  int wire = MI_IS_WIREFRAME(mi);
   GLint *p;
   /*GLfloat *this_n;*/
   int count;
+#if 0
+  int wire = MI_IS_WIREFRAME(mi);
 
   GLfloat bcolor[4] = {0.2, 0.2, 0.2, 0.2};
   GLfloat bspec[4]  = {0.1, 0.1, 0.1, 0.1};
@@ -208,7 +209,7 @@ static void new_ship(ModeInfo *mi)
 		glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, bspec);
 		glMateriali  (GL_FRONT_AND_BACK, GL_SHININESS, bshiny);
 	}
-
+#endif
 
   cp->list = glGenLists(1);
   glNewList(cp->list, GL_COMPILE);
@@ -216,15 +217,20 @@ static void new_ship(ModeInfo *mi)
     /* FIXME support mono display */
     abort();
   }
-  else
-  {
+  
 		/* http://www.opengl.org/resources/faq/technical/polygonoffset.htm
 		 * says "Two passes are then made, once with the model's solid
 		 * geometry and once again with the line geometry." -- so this
 		 * draws the solid polygons first.
 		 * Seconded by http://glprogramming.com/red/chapter06.html
+		 *
+		 * However, we end up with hideous flickering doing that, so
+		 * having got the vertex winding orders sorted out, for the time
+		 * being let's abandon filled mode, and *always* draw wireframes.
+		 * Thus lots of code is if-0'ed out.
 		 */
 
+#if 0
 	if(wire) {
 		/* set up the offset for the black fill for hidden line removal */
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -232,12 +238,13 @@ static void new_ship(ModeInfo *mi)
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		glColor3f(0.0, 0.0, 0.0);
   }
+#endif
 
   /* reset pointers */
 	p=ship_f[cp->which];
   this_v=ship_v[cp->which];
-  /*this_n=ship_n[cp->which];*/
 
+#if 0
   /* draw the solid shape */
   while(*p != 0) {
     count=*p; p++;
@@ -255,7 +262,6 @@ static void new_ship(ModeInfo *mi)
           this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
           this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
           this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
-			/*glNormal3f(this_n[0],this_n[1],this_n[2]); this_n+=3;*/
       }
     for (i = 0 ; i < count ; i++) {
         glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
@@ -265,13 +271,11 @@ static void new_ship(ModeInfo *mi)
     glEnd();
   }
 
-
-
   if(wire) { glDisable(GL_POLYGON_OFFSET_FILL); }
 
-  }
-
   if(wire) {
+#endif
+
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glColor3f(1.0, 1.0, 1.0);
 
@@ -281,7 +285,7 @@ static void new_ship(ModeInfo *mi)
   	/* reset pointers */
 		p=ship_f[cp->which];
 		this_v=ship_v[cp->which];
-		/*this_n=ship_n[cp->which];*/
+
 		/* draw the wireframe shape */
     while(*p != 0) {
       count=*p; p++;
@@ -292,7 +296,6 @@ static void new_ship(ModeInfo *mi)
         do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
           this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
           this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
-				/*glNormal3f(this_n[0],this_n[1],this_n[2]); this_n+=3;*/
 			}
       for (i = 0 ; i < count ; i++) {
         glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
@@ -301,7 +304,9 @@ static void new_ship(ModeInfo *mi)
       p+=count;
       glEnd();
     }
+#if 0
 	}
+#endif
   glEndList();
 }
 
@@ -397,11 +402,9 @@ ENTRYPOINT void draw_commander(ModeInfo * mi)
 {
   Display *display = MI_DISPLAY(mi);
   Window window = MI_WINDOW(mi);
-  commander_conf *cp;
-  if (!commander) return;
-  cp = &commander[MI_SCREEN(mi)];
-  MI_IS_DRAWN(mi) = True;
+  commander_conf *cp = &commander[MI_SCREEN(mi)];
   if (!cp->glx_context) return;
+  /*MI_IS_DRAWN(mi) = True;*/
   glXMakeCurrent(display, window, *(cp->glx_context));
   if (!draw_main(cp)) {
     release_commander(mi);
