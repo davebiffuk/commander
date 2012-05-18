@@ -18,6 +18,8 @@ while(1) {
 	next if $name=~m/splinter/i; # can't parse that one
 	next if $name=~m/square/i; # boring
 	next if $name=~m/tetra/i; # boring
+	$bonusfaces=0;
+	if($name eq "krait") { $bonusfaces=4; } # keep the side "aerials"(?)
 	$front_laser=r(); # FIXME use this vertex number
 	$qvf=r();
 	($qv, $qf) = split(/,/, $qvf);
@@ -27,6 +29,7 @@ while(1) {
 		else { $qf=hex_to_dec($qf); }
 #	if($qf=~m/-/) { $qf=hex_to_dec($qf); } else { $qf=eval $qf; }
 	push @ships, $name;
+	$qf += $bonusfaces;
 	print "\n/* ", $name, " has ", $qv, " vertices and ",
 		  $qf, " faces */\n\n";
 	$vertices=r(); # literal "vertices"
@@ -80,6 +83,7 @@ sub r {
 	do {
 		$r=<I>;
 		chomp $r;
+		$r =~ s/^REM  kr1/ kr1/; # keep Krait aerials
 		if($r =~ m/^REM/) { print "/* skipping: $r */\n"; }
 	} until ($r !~ m/^REM/);
 	$r=~s/^\s*//;
