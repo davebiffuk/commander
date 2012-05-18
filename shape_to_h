@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 # vi:ai:ts=4:sw=4:cindent
 
+use Data::Dumper;
+
 open(I,"B7051600.TXT") or die "open failed: $!\n";
 
 $first_colon=0;
@@ -13,7 +15,7 @@ while(1) {
 	skip_to_colon();
 	$name=lc(r());
 	next if $name=~m/splinter/i; # can't parse that one
-	$front_laser=r();
+	$front_laser=r(); # FIXME use this vertex number
 	$qvf=r();
 	($qv, $qf) = split(/,/, $qvf);
 	if($qv=~m/([^-]+)-(\d+)/) { $qv=hex_to_dec($1)-$2; }
@@ -55,19 +57,31 @@ while(1) {
 	$faces=r(); # literal "faces"
 	if($faces !~ m/faces/i) { print "not faces: $l\n"; exit; }
 	print "GLint ", $name, "_f[] = {\n";
+	@normals = ();
 	for ($i=0; $i<$qf; $i++) {
 		$l=r();
 		($col,$nx,$ny,$nz,$rest) = split(/,/, $l, 5);
+		$nx=hex_to_dec($nx); $ny=hex_to_dec($ny); $nz=hex_to_dec($nz);
+		push @normals, ($nx*$scale, $ny*$scale, $nz*$scale);
 		print $rest, ",\n";
 	}
 	print "0\n";
 	print "};\n";
+
+#	print "GLfloat ",$name, "_n[] = {\n";
+#	for ($i=0; $i<$qf*3; $i++) {
+#		$a=shift @normals;
+#		print $a, ", ";
+#		if(($i % 3) == 2) { print "\n"; }
+#	}
+#	print "};\n";
 
 }
 
 # not reached
 exit(0);
 
+# read a line, skipping REMs and stripping whitespace
 sub r {
 	my $r;
 	do {
@@ -115,4 +129,9 @@ sub trailer {
 		print "\t&", $i, "_f[0],\n";
 	}
 	print "};\n";
+#	print "GLfloat *ship_n[] = {\n";
+#	foreach $i (@ships) {
+#		print "\t&", $i, "_n[0],\n";
+#	}
+#	print "};\n";
 }

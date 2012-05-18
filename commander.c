@@ -166,7 +166,9 @@ static void init_gl(ModeInfo *mi)
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDrawBuffer(GL_BACK);
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE); /* FIXME interacts badly with shape_to_h */
+	glEnable(GL_NORMALIZE);
+  glEnable(GL_CULL_FACE); /* FIXME interacts badly with original data
+														 from shape_to_h */
   /* glFrontFace(GL_CCW); */ /* CCW for original source data */
   glFrontFace(GL_CW); /* CW for "by hand" data */
 
@@ -182,6 +184,7 @@ static void new_ship(ModeInfo *mi)
   GLfloat *this_v;
   int wire = MI_IS_WIREFRAME(mi);
   GLint *p;
+  /*GLfloat *this_n;*/
   int count;
 
   GLfloat bcolor[4] = {0.2, 0.2, 0.2, 0.2};
@@ -206,8 +209,6 @@ static void new_ship(ModeInfo *mi)
 		glMateriali  (GL_FRONT_AND_BACK, GL_SHININESS, bshiny);
 	}
 
-	p=ship_f[cp->which];
-  this_v=ship_v[cp->which];
 
   cp->list = glGenLists(1);
   glNewList(cp->list, GL_COMPILE);
@@ -232,8 +233,10 @@ static void new_ship(ModeInfo *mi)
 		glColor3f(0.0, 0.0, 0.0);
   }
 
-  /* reset pointer */
+  /* reset pointers */
 	p=ship_f[cp->which];
+  this_v=ship_v[cp->which];
+  /*this_n=ship_n[cp->which];*/
 
   /* draw the solid shape */
   while(*p != 0) {
@@ -248,12 +251,11 @@ static void new_ship(ModeInfo *mi)
       if(wire) { glColor3f(0.0, 0.0, 0.0); }
       if(!wire) { glEnable(GL_LIGHTING); }
       glBegin(GL_POLYGON); 
-			/*
       do_normal(
           this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
           this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
           this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
-					*/
+			/*glNormal3f(this_n[0],this_n[1],this_n[2]); this_n+=3;*/
       }
     for (i = 0 ; i < count ; i++) {
         glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
@@ -276,8 +278,10 @@ static void new_ship(ModeInfo *mi)
 		/* chunky lines :-) */
 		glLineWidth(2); 
 
-  	/* reset pointer */
+  	/* reset pointers */
 		p=ship_f[cp->which];
+		this_v=ship_v[cp->which];
+		/*this_n=ship_n[cp->which];*/
 		/* draw the wireframe shape */
     while(*p != 0) {
       count=*p; p++;
@@ -285,11 +289,10 @@ static void new_ship(ModeInfo *mi)
       else if(count==2) { glBegin(GL_LINES); }
       else {
 				glBegin(GL_POLYGON); 
-				/*
         do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
           this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
           this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
-					*/
+				/*glNormal3f(this_n[0],this_n[1],this_n[2]); this_n+=3;*/
 			}
       for (i = 0 ; i < count ; i++) {
         glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
