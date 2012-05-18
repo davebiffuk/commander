@@ -1,11 +1,8 @@
 To-do: (approximate priority order)
 
+* reinstate front lasers
 * xscreensaver necessities: .man, .xml
-* Asp: check data
-* Cobra: add engines
-* Viper: add engines
 * Coriolis/Dodo: tearing of docking port in filled mode
-* should Coriolis only rotate about docking port axis?
 * textures??
 
 Ongoing:
@@ -20,6 +17,11 @@ Done:
 * fix wireframe drawing - do filled polygons first
 * fix polygon data to merge triangles - no, use original data
 * check Oolite licensing situation - CC-NC-SA-2 - no, use original data
+* Viper: add engines - by using original data
+* Cobra: add engines - by using original data
+* Asp: check data - by using original data
+* should Coriolis only rotate about docking port axis? - hard, not
+  worth it
 
 
 Gah, Gnome will only list/start a screensaver if it's in a "trusted"
