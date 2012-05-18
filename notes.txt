@@ -1,7 +1,5 @@
 To-do: (approximate priority order)
 
-* fix wireframe drawing - do filled polygons first
-* check Oolite licensing situation - CC-NC-SA-2
 * xscreensaver necessities: .man, .xml
 * Asp: check data
 * Cobra: add engines
@@ -12,8 +10,6 @@ To-do: (approximate priority order)
 
 Ongoing:
 
-* fix polygon data to merge triangles
-
 Done:
 
 * add command-line switch to choose which ship is displayed
@@ -21,6 +17,9 @@ Done:
 * Coriolis: fix docking port
 * rename cobra.* -> commander.*
 * "random" mode - change displayed ship sometimes
+* fix wireframe drawing - do filled polygons first
+* fix polygon data to merge triangles - no, use original data
+* check Oolite licensing situation - CC-NC-SA-2 - no, use original data
 
 
 Gah, Gnome will only list/start a screensaver if it's in a "trusted"
