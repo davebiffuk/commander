@@ -228,7 +228,7 @@ static void new_ship(ModeInfo *mi)
 	if(wire) {
 		/* set up the offset for the black fill for hidden line removal */
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glPolygonOffset(0.0, 0.0);
+		glPolygonOffset(1.0, 1.0);
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		glColor3f(0.0, 0.0, 0.0);
   }
