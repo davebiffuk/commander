@@ -18,6 +18,7 @@ while(1) {
 	next if $name=~m/splinter/i; # can't parse that one
 	next if $name=~m/square/i; # boring
 	next if $name=~m/tetra/i; # boring
+	next if $name=~m/platelet/i; # boring
 	$bonusfaces=0;
 	if($name eq "krait") { $bonusfaces=4; } # keep the side "aerials"(?)
 	$front_laser=r(); # FIXME use this vertex number

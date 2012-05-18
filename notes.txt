@@ -11,8 +11,10 @@ To-do: (approximate priority order)
 
 Ongoing:
 
-* Missile: fix fin culling/show-through
-* Krait: fix side aerial show-through
+* fix show-through:
+  - Krait side aerials
+  - Cougar side fins
+  - Missile fins
 
 Done:
 
