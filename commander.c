@@ -409,7 +409,7 @@ ENTRYPOINT void draw_commander(ModeInfo * mi)
   }
   mi->polygon_count = cp->npoints;
   if (MI_IS_FPS(mi)) do_fps (mi);
-  /*glFlush();*/
+  glFlush(); /* or glFinish(); ??? */
   glXSwapBuffers(display, window);
 }
 

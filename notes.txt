@@ -1,7 +1,8 @@
 To-do: (approximate priority order)
 
-* reinstate front lasers
+* fix flickering - glFlush() doesn't help - check polyhedra
 * Transporter: reinstate IB/DB initials and lines on base
+* reinstate front lasers
 * Missile: fix fin culling
 * Asp: check original data for aerials
 * Moray: windscreen tearing
