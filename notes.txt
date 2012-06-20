@@ -53,6 +53,7 @@ Elite ships: http://wiki.alioth.net/index.php/Classic_Elite_ships
 http://live.gnome.org/GnomeScreensaver/FrequentlyAskedQuestions
 
 Hidden line removal: http://glprogramming.com/red/chapter14.html#name16
+http://www.bluevoid.com/opengl/sig00/advanced00/notes/node105.html
 
 to invert winding order:
 sed -e 's/{//' -e 's/},//' | awk -F , '{ print "{" $3 ","  $2 "," $1 "}," }'
