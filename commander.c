@@ -166,11 +166,11 @@ static void init_gl(ModeInfo *mi)
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDrawBuffer(GL_BACK);
   glEnable(GL_DEPTH_TEST);
-	/*glEnable(GL_NORMALIZE);*/ /* breaks lighting in filled mode */
   glEnable(GL_CULL_FACE); /* FIXME interacts badly with original data
-														 from shape_to_h */
-  /* glFrontFace(GL_CCW); */ /* CCW for original source data */
-  glFrontFace(GL_CW); /* CW for "by hand" data */
+														 from shape_to_h; need to manually add
+														 shapes for other side of cougar, missile
+														 fins, etc */
+  glFrontFace(GL_CW); /* CW for data from shape_to_h */
 
   /* glPixelStorei(GL_UNPACK_ALIGNMENT, 1); */
   glShadeModel(GL_SMOOTH);
@@ -217,96 +217,105 @@ static void new_ship(ModeInfo *mi)
     /* FIXME support mono display */
     abort();
   }
+
+	/* wireframe strategy: use stencil buffer, not polygon offset,
+	 * because it's impossible to get the right parameters for
+	 * glPolygonOffset() reliably */
   
-		/* http://www.opengl.org/resources/faq/technical/polygonoffset.htm
-		 * says "Two passes are then made, once with the model's solid
-		 * geometry and once again with the line geometry." -- so this
-		 * draws the solid polygons first.
-		 * Seconded by http://glprogramming.com/red/chapter06.html
-		 *
-		 * However, we end up with hideous flickering doing that, so
-		 * having got the vertex winding orders sorted out, for the time
-		 * being let's abandon filled mode, and *always* draw wireframes.
-		 * Thus lots of code is if-0'ed out.
-		 */
+	/* hidden-line removal as per
+	 * http://glprogramming.com/red/chapter14.html#name16
+	 */
 
-#if 0
-	if(wire) {
-		/* set up the offset for the black fill for hidden line removal */
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glPolygonOffset(1.0, 1.0);
-		glEnable(GL_POLYGON_OFFSET_FILL);
-		glColor3f(0.0, 0.0, 0.0);
-  }
-#endif
+	/* TODO:
+		 - reinstate choice of wireframe vs filled
+		 - rationalise some of the duplicated code below
+	 */
 
-  /* reset pointers */
+	glEnable(GL_STENCIL_TEST);
+	glEnable(GL_DEPTH_TEST);
+	glClear(GL_STENCIL_BUFFER_BIT);
+	glStencilFunc(GL_ALWAYS, 0, 1);
+	glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
+
+	glColor3f(1.0, 1.0, 1.0);
+
 	p=ship_f[cp->which];
-  this_v=ship_v[cp->which];
+	this_v=ship_v[cp->which];
 
-#if 0
-  /* draw the solid shape */
-  while(*p != 0) {
-    count=*p; p++;
-    if(count==1) { glBegin(GL_POINTS); }
-    else if(count==2) { /* FIXME this is imperfect */
-      glDisable(GL_LIGHTING);
-      glColor3f(0.7, 0.7, 0.7);
-      glBegin(GL_LINES);
-    }
-    else {
-      if(wire) { glColor3f(0.0, 0.0, 0.0); }
-      if(!wire) { glEnable(GL_LIGHTING); }
-      glBegin(GL_POLYGON); 
-      do_normal(
-          this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
-          this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
-          this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
-      }
-    for (i = 0 ; i < count ; i++) {
-        glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
-    }
-    cp->npoints++;
-    p+=count;
-    glEnd();
-  }
+	/* draw the wireframe shape */
+	while(*p != 0) {
+		count=*p; p++;
 
-  if(wire) { glDisable(GL_POLYGON_OFFSET_FILL); }
+		/* draw outline polygon */
 
-  if(wire) {
-#endif
+		if(count==1) { glBegin(GL_POINTS); }
+		else if(count==2) {
+			/* chunky lines :-) */
+			glLineWidth(2); 
+			glBegin(GL_LINES);
+		}
+		else {
+			glLineWidth(2); 
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glBegin(GL_POLYGON); 
+			do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
+				this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
+				this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
+		}
+		for (i = 0 ; i < count ; i++) {
+			glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
+		}
+		glEnd();
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glColor3f(1.0, 1.0, 1.0);
+		glColor3f(0.0, 0.0, 0.0);
 
-		/* chunky lines :-) */
-		glLineWidth(2); 
+		glStencilFunc(GL_EQUAL, 0, 1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  	/* reset pointers */
-		p=ship_f[cp->which];
-		this_v=ship_v[cp->which];
+		/* draw filled polygon */
 
-		/* draw the wireframe shape */
-    while(*p != 0) {
-      count=*p; p++;
-      if(count==1) { glBegin(GL_POINTS); }
-      else if(count==2) { glBegin(GL_LINES); }
-      else {
-				glBegin(GL_POLYGON); 
-        do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
-          this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
-          this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
+		if(count>=3) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glBegin(GL_POLYGON); 
+			do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
+				this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
+				this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
+			for (i = 0 ; i < count ; i++) {
+				glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
 			}
-      for (i = 0 ; i < count ; i++) {
-        glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
-      }
-      cp->npoints++;
-      p+=count;
-      glEnd();
-    }
-#if 0
+			glEnd();
+		}
+
+		glColor3f(1.0, 1.0, 1.0);
+
+		glStencilFunc(GL_ALWAYS, 0, 1);
+		glStencilOp(GL_INVERT, GL_INVERT, GL_INVERT);
+
+		/* draw outline polygon */
+
+		if(count==1) { glBegin(GL_POINTS); }
+		else if(count==2) {
+			/* chunky lines :-) */
+			glLineWidth(2); 
+			glBegin(GL_LINES);
+		}
+		else {
+			glLineWidth(2); 
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glBegin(GL_POLYGON); 
+			do_normal(this_v[p[0]*3], this_v[p[0]*3+1], this_v[p[0]*3+2],
+				this_v[p[1]*3], this_v[p[1]*3+1], this_v[p[1]*3+2],
+				this_v[p[2]*3], this_v[p[2]*3+1], this_v[p[2]*3+2]);
+		}
+		for (i = 0 ; i < count ; i++) {
+			glVertex3f(this_v[p[i]*3], this_v[p[i]*3+1], this_v[p[i]*3+2]);
+		}
+		glEnd();
+
+		cp->npoints++;
+		p+=count;
 	}
-#endif
+
   glEndList();
 }
 
@@ -320,7 +329,7 @@ ENTRYPOINT void reshape_commander(ModeInfo *mi, int width, int height)
   glViewport(0, 0, (GLint) width, (GLint) height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, cp->ratio, 1.0, 100.0);
+  gluPerspective(60.0, cp->ratio, 10.0, 30.0);
   glMatrixMode(GL_MODELVIEW);
   glClear(GL_COLOR_BUFFER_BIT);
 }
