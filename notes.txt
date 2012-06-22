@@ -1,5 +1,8 @@
 To-do: (approximate priority order)
 
+* fix clipping planes and/or scaling
+* fix other sides of missile fins, cougar side fin
+* manually fix in-plane point co-ordinates
 * Transporter: reinstate IB/DB initials and lines on base
 * reinstate front lasers
 * Asp: check original data for aerials
@@ -11,10 +14,6 @@ To-do: (approximate priority order)
 
 Ongoing:
 
-* fix show-through:
-  - Krait side aerials
-  - Cougar side fins
-  - Missile fins
 
 Done:
 
@@ -36,6 +35,10 @@ Done:
   mode doesn't work any more)
   - fixes Krait: windscreen tearing
   - fixes Moray: windscreen tearing
+* fix show-through:
+  - Krait side aerials
+  - Cougar side fins
+  - Missile fins
 
 
 Gah, Gnome will only list/start a screensaver if it's in a "trusted"

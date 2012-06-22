@@ -329,7 +329,7 @@ ENTRYPOINT void reshape_commander(ModeInfo *mi, int width, int height)
   glViewport(0, 0, (GLint) width, (GLint) height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, cp->ratio, 10.0, 30.0);
+  gluPerspective(60.0, cp->ratio, 1.0, 50.0);
   glMatrixMode(GL_MODELVIEW);
   glClear(GL_COLOR_BUFFER_BIT);
 }
