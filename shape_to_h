@@ -10,7 +10,7 @@ $first_colon=0;
 $waiting_for_name=0;
 $name="";
 @ships=();
-$exp_size=5; # size to map to
+$exp_size=10; # size to map to
 
 while(1) {
 	skip_to_colon();
@@ -36,6 +36,7 @@ while(1) {
 	$vertices=r(); # literal "vertices"
 	if($vertices !~ m/vertices/i) { print "not vertices: $l\n"; exit; }
 	$maxx=0; $maxy=0; $maxz=0;
+	$minx=0; $miny=0; $minz=0;
 	@verts=();
 	print "GLfloat ", $name, "_v[] = {\n";
 	for ($i=0; $i<$qv; $i++) {
@@ -45,13 +46,23 @@ while(1) {
 		if($x>$maxx) { $maxx=$x; }
 		if($y>$maxy) { $maxy=$y; }
 		if($z>$maxz) { $maxz=$z; }
+		if($x<$minx) { $minx=$x; }
+		if($y<$miny) { $miny=$y; }
+		if($z<$minz) { $minz=$z; }
 		push @verts, ($x,$y,$z);
 	}
-	$max=0;
+	$max=0; $min=0;
 	if($maxx>$max) { $max=$maxx; }
 	if($maxy>$max) { $max=$maxy; }
 	if($maxz>$max) { $max=$maxz; }
-	$scale=$exp_size/$max;
+	if($minx<$min) { $min=$minx; }
+	if($miny<$min) { $min=$miny; }
+	if($minz<$min) { $min=$minz; }
+	$maxdim=0;
+	if(($maxx-$minx)>$maxdim) { $maxdim=($maxx-$minx); }
+	if(($maxy-$miny)>$maxdim) { $maxdim=($maxy-$miny); }
+	if(($maxz-$minz)>$maxdim) { $maxdim=($maxz-$minz); }
+	$scale=$exp_size/$maxdim;
 	print "/* scale=$scale */\n";
 	for ($i=0; $i<$qv; $i++) {
 		$x = $verts[$i*3];

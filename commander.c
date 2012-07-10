@@ -242,6 +242,17 @@ static void new_ship(ModeInfo *mi)
 	p=ship_f[cp->which];
 	this_v=ship_v[cp->which];
 
+	/* for debugging - draw axes */
+#if 0
+	glLineWidth(1); 
+	glBegin(GL_LINES); glVertex3f(0,0,0); glVertex3f(10,0,0); glEnd();
+	glBegin(GL_LINES); glVertex3f(0,0,0); glVertex3f(0,10,0); glEnd();
+	glBegin(GL_LINES); glVertex3f(0.1,0,0); glVertex3f(0.1,10,0); glEnd();
+	glBegin(GL_LINES); glVertex3f(0,0,0); glVertex3f(0,0,10); glEnd();
+	glBegin(GL_LINES); glVertex3f(0,0.1,0); glVertex3f(0,0.1,10); glEnd();
+	glBegin(GL_LINES); glVertex3f(0,0.2,0); glVertex3f(0,0.2,10); glEnd();
+#endif
+
 	/* draw the wireframe shape */
 	while(*p != 0) {
 		count=*p; p++;
