@@ -1,19 +1,17 @@
 To-do: (approximate priority order)
 
-* fix clipping planes and/or scaling
-* fix other sides of missile fins, cougar side fin
-* manually fix in-plane point co-ordinates
-* Transporter: reinstate IB/DB initials and lines on base
-* reinstate front lasers
+* fix clipping planes and/or scaling so that ships don't fall
+  "through" the sides of the screen
+* reinstate front lasers - cobra, others?
 * Asp: check original data for aerials
 * Moray: check original data for torpedo tubes
-* Thargoid: check original data for lines on base
-* xscreensaver necessities: .man, .xml
 * Coriolis/Dodo: tearing of docking port in filled mode
 * textures??
 
 Ongoing:
 
+* manually fix in-plane point co-ordinates
+* Transporter: reinstate IB/DB initials and lines on base
 
 Done:
 
@@ -39,6 +37,9 @@ Done:
   - Krait side aerials
   - Cougar side fins
   - Missile fins
+* Thargoid: check original data for lines on base
+* fix other sides of missile fins, cougar side fin
+* xscreensaver necessities: .man, .xml
 
 
 Gah, Gnome will only list/start a screensaver if it's in a "trusted"
