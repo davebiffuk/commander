@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Commander
+Comment=Displays spaceships from the computer game Elite. Written by Dave Holland, 2011.
+TryExec=/usr/lib/xscreensaver/commander -wire
+Exec=/usr/lib/xscreensaver/commander -wire -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver;
+OnlyShowIn=GNOME;
