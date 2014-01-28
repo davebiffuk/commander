@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DEST=~/o/xscreensaver-5.15
+#./shape_to_h  > commander.h
+cp commander.{c,h,man} $DEST/hacks/glx
+cp commander.xml $DEST/hacks/config
+cd $DEST
+touch config.h
+make
