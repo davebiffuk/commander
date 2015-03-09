@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEST=~/o/xscreensaver-5.15
+DEST=~/x/xscreensaver-5.32
 #./shape_to_h  > commander.h
 cp commander.{c,h,man} $DEST/hacks/glx
 cp commander.xml $DEST/hacks/config

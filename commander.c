@@ -387,7 +387,7 @@ ENTRYPOINT void init_commander(ModeInfo *mi)
 
     cp->rot = make_rotator (spin_speed, spin_speed, spin_speed,
                             spin_accel, 0, True);
-    cp->trackball = gltrackball_init ();
+    cp->trackball = gltrackball_init (True);
   }
 
 	/* figure out which ship to display */
