@@ -1,0 +1,58 @@
+--- xscreensaver-5.32/hacks/glx/Makefile.in	2014-11-19 07:24:03.000000000 +0000
++++ /tmp/Makefile.in	2015-03-09 23:40:03.747399916 +0000
+@@ -122,7 +122,7 @@
+ 		  tronbit_no.c tronbit_yes.c jwzgles.c kaleidocycle.c \
+ 		  quasicrystal.c unknownpleasures.c geodesic.c geodesicgears.c \
+ 		  projectiveplane.c winduprobot.c robot.c robot-wireframe.c \
+-		  cityflow.c
++		  cityflow.c commander.c
+ 
+ OBJS		= xscreensaver-gl-helper.o normals.o fps-gl.o \
+ 		  atlantis.o b_draw.o b_lockglue.o b_sphere.o bubble3d.o \
+@@ -164,7 +164,7 @@
+ 		  tronbit_no.o tronbit_yes.o jwzgles.o kaleidocycle.o \
+ 		  quasicrystal.o unknownpleasures.o geodesic.o geodesicgears.o \
+ 		  projectiveplane.o winduprobot.o robot.o robot-wireframe.o \
+-		  cityflow.o
++		  cityflow.o commander.o
+ 
+ GL_EXES		= cage gears moebius pipes sproingies stairs superquadrics \
+ 		  morph3d rubik atlantis lament bubble3d glplanet pulsar \
+@@ -181,7 +181,8 @@
+ 		  lockward cubicgrid hypnowheel skytentacles jigsaw photopile \
+ 		  rubikblocks surfaces hilbert companioncube tronbit \
+ 		  kaleidocycle quasicrystal unknownpleasures geodesic \
+-		  geodesicgears projectiveplane winduprobot cityflow
++		  geodesicgears projectiveplane winduprobot cityflow \
++		  commander
+ GLE_EXES	= extrusion
+ SUID_EXES	= sonar
+ GL_UTIL_EXES	= xscreensaver-gl-helper
+@@ -216,7 +217,7 @@
+ 		  texfont.h tangram_shapes.h sproingies.h extrusion.h \
+ 		  glschool.h glschool_gl.h glschool_alg.h topblock.h \
+ 		  involute.h teapot.h sonar.h dropshadow.h starwars.h \
+-		  jwzgles.h jwzglesI.h teapot2.h dnapizza.h
++		  jwzgles.h jwzglesI.h teapot2.h dnapizza.h commander.h
+ GL_MEN		= atlantis.man boxed.man bubble3d.man cage.man circuit.man \
+ 		  cubenetic.man dangerball.man engine.man extrusion.man \
+ 		  flipscreen3d.man gears.man gflux.man \
+@@ -241,7 +242,7 @@
+ 		  companioncube.man tronbit.man kaleidocycle.man \
+ 		  quasicrystal.man unknownpleasures.man geodesic.man \
+ 		  geodesicgears.man projectiveplane.man winduprobot.man \
+-		  cityflow.man
++		  cityflow.man commander.man
+ MEN		= @GL_MEN@
+ RETIRED_MEN	= glforestfire.man
+ EXTRAS		= README Makefile.in dxf2gl.pl vrml2gl.pl wfront2gl.pl \
+@@ -899,6 +900,9 @@
+ cityflow:	cityflow.o	$(HACK_TRACK_OBJS)
+ 	$(CC_HACK) -o $@ $@.o	$(HACK_TRACK_OBJS) $(HACK_LIBS)
+ 
++commander:	commander.o	normals.o $(HACK_TRACK_OBJS)
++	$(CC_HACK) -o $@ $@.o	normals.o $(HACK_TRACK_OBJS) $(HACK_LIBS)
++
+ ##############################################################################
+ #
+ # DO NOT DELETE: updated by make distdepend

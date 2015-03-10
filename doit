@@ -4,6 +4,8 @@ DEST=~/x/xscreensaver-5.32
 #./shape_to_h  > commander.h
 cp commander.{c,h,man} $DEST/hacks/glx
 cp commander.xml $DEST/hacks/config
+patch $DEST/hacks/glx/Makefile.in < Makefile.in.diff
 cd $DEST
 touch config.h
+./configure
 make
