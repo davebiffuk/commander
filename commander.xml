@@ -9,16 +9,12 @@
           low="0.01" high="5.0" default="1.0"/>
 
   <select id="object">
-<option _label="Random" arg-set=""/>
+<option _label="Random"/>
 <option _label="Asp" arg-set="-which asp"/>
 <option _label="Cobra Mk 3" arg-set="-which cobra"/>
 <option _label="Coriolis space station" arg-set="-which coriolis"/>
 <option _label="Thargoid" arg-set="-which thargoid"/>
   </select>
-
-  <hgroup>
-   <boolean id="wire"    _label="Wireframe" arg-set="-wireframe"/>
-  </hgroup>
 
   <hgroup>
    <boolean id="showfps" _label="Show frame rate" arg-set="-fps"/>
