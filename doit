@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="5.32"
+VERSION="5.34"
 URL="http://www.jwz.org/xscreensaver/xscreensaver-${VERSION}.tar.gz"
 DEST="${HOME}/xscreensaver-${VERSION}-build"
 mkdir -p $DEST
@@ -24,6 +24,10 @@ DEST=${DEST}/xscreensaver-${VERSION}
 cp commander.{c,h,man} $DEST/hacks/glx
 cp commander.xml $DEST/hacks/config
 patch $DEST/hacks/glx/Makefile.in < Makefile.in.diff
+if [ $? -ne 0 ]; then
+    echo "patching failed, aborting"
+    exit 1
+fi
 cd $DEST
 touch config.h
 ./configure
