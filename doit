@@ -1,10 +1,10 @@
 #!/bin/bash
 
-VERSION="5.34"
-URL="http://www.jwz.org/xscreensaver/xscreensaver-${VERSION}.tar.gz"
+VERSION="6.01"
+URL="https://www.jwz.org/xscreensaver/xscreensaver-${VERSION}.tar.gz"
 DEST="${HOME}/xscreensaver-${VERSION}-build"
-mkdir -p $DEST
-pushd $DEST
+
+cd
 if [ ! -f "xscreensaver-${VERSION}.tar.gz" ]; then
     if [ -x /usr/bin/wget ]; then
         wget $URL
@@ -15,8 +15,10 @@ if [ ! -f "xscreensaver-${VERSION}.tar.gz" ]; then
         exit 1
     fi
 fi
+mkdir -p $DEST
+pushd $DEST
 if [ ! -d "xscreensaver-${VERSION}" ]; then
-    tar xfz "xscreensaver-${VERSION}.tar.gz"
+    tar xfz "~/xscreensaver-${VERSION}.tar.gz"
 fi
 popd
 #./shape_to_h  > commander.h

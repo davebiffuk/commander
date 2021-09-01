@@ -436,6 +436,10 @@ ENTRYPOINT void draw_commander(ModeInfo * mi)
   glXSwapBuffers(display, window);
 }
 
+ENTRYPOINT void free_commander(ModeInfo *mi)
+{
+}
+
 #ifndef STANDALONE
 ENTRYPOINT void change_commander(ModeInfo * mi) 
 {

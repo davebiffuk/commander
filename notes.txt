@@ -1,3 +1,18 @@
+Adding extra ships from Elite-A
+
+https://www.bbcelite.com/deep_dives/elite-a_the_original_source_files.html
+https://github.com/markmoxon/elite-a-beebasm
+
+ship data is in:
+elite-a-beebasm/1-source-files/main-sources/elite-ships-*.asm
+
+xscreensaver 6.01 needs EGL/egl.h
+(sudo apt install libegl-dev?)
+sudo apt install libegl1-mesa-dev <-- 18.04
+(also systemd lib somehow?)
+
+---------------
+
 To-do: (approximate priority order)
 
 * fix clipping planes and/or scaling so that ships don't fall
