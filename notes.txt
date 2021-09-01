@@ -1,5 +1,7 @@
 To-do: (approximate priority order)
 
+* update for 5.36 as shipped with Ubuntu 18.04
+* add extra ships from Elite-A (see below)
 * fix clipping planes and/or scaling so that ships don't fall
   "through" the sides of the screen
 * reinstate front lasers - cobra, others?
@@ -7,6 +9,7 @@ To-do: (approximate priority order)
 * Moray: check original data for torpedo tubes
 * Coriolis/Dodo: tearing of docking port in filled mode
 * textures??
+* update for 6.01 (not yet shipped by Debian or Ubuntu) v601 branch
 
 Ongoing:
 
@@ -70,3 +73,14 @@ __GL_SYNC_TO_VBLANK=1
 LIBL_SYNC_REFRESH=1
 
 http://www.opengl.org/wiki/Synchronization
+
+Adding extra ships from Elite-A:
+https://www.bbcelite.com/deep_dives/elite-a_the_original_source_files.html
+https://github.com/markmoxon/elite-a-beebasm
+ship data is in:
+elite-a-beebasm/1-source-files/main-sources/elite-ships-*.asm
+
+xscreensaver 6.01 needs EGL/egl.h
+(sudo apt install libegl-dev?)
+sudo apt install libegl1-mesa-dev <-- 18.04
+(also systemd lib somehow?)
