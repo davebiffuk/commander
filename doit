@@ -1,22 +1,24 @@
 #!/bin/bash
 
-VERSION="5.34"
-URL="http://www.jwz.org/xscreensaver/xscreensaver-${VERSION}.tar.gz"
+VERSION="5.36"
+URL="http://deb.debian.org/debian/pool/main/x/xscreensaver/xscreensaver_${VERSION}.orig.tar.gz"
 DEST="${HOME}/xscreensaver-${VERSION}-build"
-mkdir -p $DEST
-pushd $DEST
-if [ ! -f "xscreensaver-${VERSION}.tar.gz" ]; then
+
+pushd ~
+if [ ! -f "xscreensaver_${VERSION}.orig.tar.gz" ]; then
     if [ -x /usr/bin/wget ]; then
         wget $URL
     elif [ -x /usr/bin/curl ]; then
-        curl -o "xscreensaver-${VERSION}.tar.gz" $URL
+        curl -o "xscreensaver_${VERSION}.orig.tar.gz" $URL
     else
         echo "need to download source but can't..."
         exit 1
     fi
 fi
+mkdir -p $DEST
+cd $DEST
 if [ ! -d "xscreensaver-${VERSION}" ]; then
-    tar xfz "xscreensaver-${VERSION}.tar.gz"
+    tar xfz ~/xscreensaver_${VERSION}.orig.tar.gz
 fi
 popd
 #./shape_to_h  > commander.h

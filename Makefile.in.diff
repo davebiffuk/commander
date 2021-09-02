@@ -1,6 +1,6 @@
---- Makefile.in	2017-04-11 14:57:58.584463968 +0100
-+++ /tmp/Makefile.in	2017-04-11 14:59:17.544853710 +0100
-@@ -83,6 +83,7 @@
+--- Makefile.in	2016-10-11 03:58:06.000000000 +0100
++++ /tmp/Makefile.in	2021-09-02 19:33:26.060556243 +0100
+@@ -86,6 +86,7 @@
  		  $(HACK_SRC)/fps.o
  
  SRCS		= xscreensaver-gl-helper.c normals.c fps-gl.c \
@@ -8,23 +8,23 @@
  		  atlantis.c b_draw.c b_lockglue.c b_sphere.c bubble3d.c \
  		  buildlwo.c cage.c dolphin.c gears.c lament.c lament_model.c \
  		  moebius.c morph3d.c pipeobjs.c pipes.c rubik.c s1_1.c s1_2.c \
-@@ -125,6 +126,7 @@
- 		  cityflow.c romanboy.c splitflap.c splitflap_obj.c
+@@ -131,6 +132,7 @@
+ 		  hexstrut.c
  
  OBJS		= xscreensaver-gl-helper.o normals.o fps-gl.o \
 +		  commander.o \
  		  atlantis.o b_draw.o b_lockglue.o b_sphere.o bubble3d.o \
  		  buildlwo.o cage.o dolphin.o gears.o lament.o lament_model.o \
  		  moebius.o morph3d.o pipeobjs.o pipes.o rubik.o s1_1.o s1_2.o \
-@@ -167,6 +169,7 @@
- 		  cityflow.o romanboy.o splitflap.o splitflap_obj.o
+@@ -176,6 +178,7 @@
+ 		  hexstrut.o
  
  GL_EXES		= cage gears moebius pipes sproingies stairs superquadrics \
 +		  commander \
  		  morph3d rubik atlantis lament bubble3d glplanet pulsar \
  		  sierpinski3d gflux stonerview starwars gltext molecule \
  		  dangerball circuit menger engine flipscreen3d glsnake boxed \
-@@ -209,6 +212,7 @@
+@@ -220,6 +223,7 @@
  		  $(UTILS_BIN)/utf8wc.o
  
  HDRS		= atlantis.h bubble3d.h buildlwo.h e_textures.h xpm-ximage.h \
@@ -32,15 +32,15 @@
  		  grab-ximage.h tube.h sphere.h boxed.h \
  		  stonerview.h stonerview-move.h stonerview-osc.h \
  		  glutstroke.h glut_roman.h marching.h rotator.h trackball.h \
-@@ -219,6 +223,7 @@
+@@ -230,6 +234,7 @@
  		  involute.h teapot.h sonar.h dropshadow.h starwars.h \
- 		  jwzgles.h jwzglesI.h teapot2.h dnapizza.h curlicue.h
+ 		  teapot2.h dnapizza.h curlicue.h
  GL_MEN		= atlantis.man boxed.man bubble3d.man cage.man circuit.man \
 +		  commander.man \
  		  cubenetic.man dangerball.man engine.man extrusion.man \
  		  flipscreen3d.man gears.man gflux.man \
  		  glplanet.man glsnake.man gltext.man lament.man lavalite.man \
-@@ -900,6 +905,9 @@
+@@ -918,6 +923,9 @@
  geodesicgears: geodesicgears.o	 $(GEARS_OBJS)
  	$(CC_HACK) -o $@ $@.o	 $(GEARS_OBJS) $(HACK_LIBS)
  
