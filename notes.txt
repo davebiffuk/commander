@@ -1,6 +1,5 @@
 To-do: (approximate priority order)
 
-* update for 5.36 as shipped with Ubuntu 18.04
 * add extra ships from Elite-A (see below)
 * fix clipping planes and/or scaling so that ships don't fall
   "through" the sides of the screen
@@ -43,6 +42,7 @@ Done:
 * Thargoid: check original data for lines on base
 * fix other sides of missile fins, cougar side fin
 * xscreensaver necessities: .man, .xml
+* update for 5.36 as shipped with Ubuntu 18.04
 
 
 Gah, Gnome will only list/start a screensaver if it's in a "trusted"
